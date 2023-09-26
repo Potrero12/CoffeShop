@@ -1,13 +1,42 @@
+import { createRef, useState } from 'react'
 import { Link } from "react-router-dom";
+import Alerta from '../components/Alerta';
+import { useAuth } from '../hooks/useAuth';
 
 export default function Registro() {
+
+    const nameRef = createRef();
+    const emailRef = createRef();
+    const passwordRef = createRef();
+    const passwordConfirmationRef = createRef();
+
+    const [errores, setErrores] = useState([]);
+    const { registro } = useAuth({middleware: 'guest', url: '/'});
+
+    const hadleSubmit = async(e) =>{
+        e.preventDefault();
+
+        const datos = {
+            name: nameRef.current.value,
+            email: emailRef.current.value,
+            password: passwordRef.current.value,
+            password_confirmation: passwordConfirmationRef.current.value
+        }
+
+        registro(datos, setErrores);
+    }
+
   return (
     <>
         <h1 className="text-4xl font-black">Crea Tu Cuenta</h1>
         <p>Crea tu Cuenta Llenando el Formulario</p>
 
         <div className="bg-white shadow-md rounded-md mt-10 px-5 py-10">
-            <form>
+            <form 
+                onSubmit={hadleSubmit}
+                noValidate
+            >
+                { errores ? errores.map((error, i) => <Alerta key={i}>{error}</Alerta>) : '' }
                 <div className="mb-4">
                     <label 
                         htmlFor="name"
@@ -18,6 +47,7 @@ export default function Registro() {
                     <input 
                         type="text"
                         name="name"
+                        ref={nameRef}
                         id="name"
                         placeholder="Tu Nombre"
                         className="mt-2 w-full p-3 bg-gray-100"
@@ -34,6 +64,7 @@ export default function Registro() {
                     <input 
                         type="email"
                         name="email"
+                        ref={emailRef}
                         id="email"
                         placeholder="Tu Email"
                         className="mt-2 w-full p-3 bg-gray-100"
@@ -50,6 +81,7 @@ export default function Registro() {
                     <input 
                         type="password"
                         name="password"
+                        ref={passwordRef}
                         id="password"
                         placeholder="Tu Password"
                         className="mt-2 w-full p-3 bg-gray-100"
@@ -66,6 +98,7 @@ export default function Registro() {
                     <input 
                         type="password"
                         name="password_confirmation"
+                        ref={passwordConfirmationRef}
                         id="password_confirmation"
                         placeholder="Repetir Password"
                         className="mt-2 w-full p-3 bg-gray-100"
