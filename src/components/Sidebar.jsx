@@ -35,7 +35,7 @@ export default function Sidebar() {
                 onClick={logout}
                 className="text-center bg-red-500 w-full p-3 font-bold text-white truncate">
                     Cancelar Orden
-                </button>
+            </button>
         </div>
     </div>
   )
